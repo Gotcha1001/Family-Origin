@@ -17,13 +17,30 @@ export default function Navbar() {
       transition={{ duration: 0.4 }}
     >
       <SidebarTrigger className="md:hidden mr-2" />
-      <Link href="/" className="text-xl font-black text-black dark:text-white tracking-tight">
-        🟢 <span className="text-red-500">GREMLIN</span> <span className="text-green-500">INC.</span>
+      <Link
+        href="/"
+        className="text-xl font-black text-black dark:text-white tracking-tight"
+      >
+        🌳 <span className="text-red-500">Family Tree</span>{" "}
+        <span className="text-green-500 text-sm font-medium tracking-normal">
+          Find Your True Roots
+        </span>
       </Link>
       <div className="flex items-center gap-3">
         <SignedOut>
-          <Link href="/sign-in"><Button variant="ghost" className="text-gray-700 dark:text-gray-200 hover:text-red-600">Sign In</Button></Link>
-          <Link href="/sign-up"><Button className="bg-red-600 dark:bg-red-700 text-white hover:bg-red-500">Sign Up</Button></Link>
+          <Link href="/sign-in">
+            <Button
+              variant="ghost"
+              className="text-gray-700 dark:text-gray-200 hover:text-red-600"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/sign-up">
+            <Button className="bg-red-600 dark:bg-red-700 text-white hover:bg-red-500">
+              Sign Up
+            </Button>
+          </Link>
         </SignedOut>
         <SignedIn>
           <ThemeToggle />
