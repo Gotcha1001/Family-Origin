@@ -217,3 +217,31 @@ export const getPublicReport = query({
     };
   },
 });
+
+export const remove = mutation({
+  args: { searchId: v.id("surnameSearches") },
+  returns: v.null(),
+  handler: async (ctx, { searchId }) => {
+    const user = await getCurrentUser(ctx);
+    if (!user) throw new Error("Unauthorized");
+
+    const search = await ctx.db.get(searchId);
+    if (!search) return null;
+
+    // Only the owner can delete their own search.
+    if (search.userId !== user._id) throw new Error("Unauthorized");
+
+    // Clean up the associated report row(s) first, then the search itself.
+    const reports = await ctx.db
+      .query("surnameReports")
+      .withIndex("by_search", (q) => q.eq("searchId", searchId))
+      .collect();
+
+    for (const report of reports) {
+      await ctx.db.delete(report._id);
+    }
+
+    await ctx.db.delete(searchId);
+    return null;
+  },
+});

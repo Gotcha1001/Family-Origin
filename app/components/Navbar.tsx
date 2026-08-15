@@ -11,21 +11,39 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 export default function Navbar() {
   return (
     <motion.nav
-      className="flex items-center justify-between px-6 py-4 border-b bg-white dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 border-gray-200 dark:border-green-900/30 shadow-sm"
+      className="relative flex items-center justify-between px-6 py-4 border-b bg-white dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 border-gray-200 dark:border-green-900/30 shadow-sm"
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
-      <SidebarTrigger className="md:hidden mr-2" />
+      {/* Mobile: trigger + compact logo, left-aligned */}
+      <div className="flex items-center gap-2 md:hidden">
+        <SidebarTrigger />
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 text-lg font-black text-black dark:text-white tracking-tight"
+        >
+          <AnimatedTree className="text-xl" />
+          <span className="text-indigo-500">Family Tree</span>
+        </Link>
+      </div>
+
+      {/* Desktop: logo centered in the navbar itself, independent of sidebar width */}
       <Link
         href="/"
-        className="text-xl font-black text-black dark:text-white tracking-tight"
+        className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 text-xl font-black text-black dark:text-white tracking-tight"
       >
-        🌳 <span className="text-red-500">Family Tree</span>{" "}
-        <span className="text-green-500 text-sm font-medium tracking-normal">
+        <AnimatedTree className="text-2xl" />
+        <span className="text-indigo-500">Family Tree</span>
+        <span className="text-purple-500 text-sm font-medium tracking-normal">
           Find Your True Roots
         </span>
       </Link>
+
+      {/* Spacer so justify-between still pushes auth buttons right on desktop
+          even though there's no left element there */}
+      <div className="hidden md:block" />
+
       <div className="flex items-center gap-3">
         <SignedOut>
           <Link href="/sign-in">
@@ -48,5 +66,31 @@ export default function Navbar() {
         </SignedIn>
       </div>
     </motion.nav>
+  );
+}
+
+function AnimatedTree({ className = "" }: { className?: string }) {
+  return (
+    <motion.span
+      className={`inline-block origin-bottom ${className}`}
+      initial={{ scale: 0, rotate: -15 }}
+      animate={{
+        scale: 1,
+        rotate: [0, -6, 6, -4, 4, 0],
+      }}
+      transition={{
+        scale: { type: "spring", stiffness: 300, damping: 15 },
+        rotate: {
+          delay: 0.4,
+          duration: 4,
+          repeat: Infinity,
+          repeatDelay: 2,
+          ease: "easeInOut",
+        },
+      }}
+      whileHover={{ scale: 1.15, rotate: 8 }}
+    >
+      🌳
+    </motion.span>
   );
 }
