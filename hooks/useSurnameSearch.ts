@@ -21,3 +21,8 @@ export function useSurnameReport(searchId: Id<"surnameSearches"> | undefined) {
 export function useSurnameHistory() {
   return useQuery(api.surnameSearches.getAll);
 }
+
+// hooks/useSurnameSearch.ts — add this export
+export function useDeleteSurnameSearch() {
+  return useMutation(api.surnameSearches.remove);
+}
